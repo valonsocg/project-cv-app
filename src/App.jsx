@@ -82,7 +82,8 @@ export default function App() {
     "Git",
   ]);
 
-  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingWorkExpIndex, setEditingWorkExpIndex] = useState(null);
+  const [editingEducationIndex, setEditingEducationIndex] = useState(null);
 
   function handlePersonalInfoChange(identifier, value) {
     setPersonalInfo((prevState) => ({
@@ -96,19 +97,30 @@ export default function App() {
   }
 
   function handleAddWorkExperience(newExperience) {
-    if (editingIndex !== null) {
+    if (editingWorkExpIndex !== null) {
       setEnteredWorkExps((prevWorkExp) =>
-        prevWorkExp.map((exp, i) => (i === editingIndex ? newExperience : exp))
+        prevWorkExp.map((exp, i) =>
+          i === editingWorkExpIndex ? newExperience : exp
+        )
       );
       //resetting editing index
-      setEditingIndex(null);
+      setEditingWorkExpIndex(null);
     } else {
       setEnteredWorkExps((prevWorkExp) => [...prevWorkExp, newExperience]);
     }
   }
 
   function handleAddEducation(newEducation) {
-    setEnteredEducation((prevEducation) => [...prevEducation, newEducation]);
+    if (editingEducationIndex !== null) {
+      setEnteredEducation((prevEducation) =>
+        prevEducation.map((edu, i) =>
+          i === editingEducationIndex ? newEducation : edu
+        )
+      );
+      setEditingEducationIndex(null);
+    } else {
+      setEnteredEducation((prevEducation) => [...prevEducation, newEducation]);
+    }
   }
 
   function handleAddSkill(newSkill) {
@@ -116,7 +128,11 @@ export default function App() {
   }
 
   function handleEditWorkExperience(index) {
-    setEditingIndex(index);
+    setEditingWorkExpIndex(index);
+  }
+
+  function handleEditEducation(index) {
+    setEditingEducationIndex(index);
   }
 
   function handleDeleteWorkExperience(index) {
@@ -151,12 +167,14 @@ export default function App() {
             onAddWorkExperience={handleAddWorkExperience}
             onDeleteWorkExp={handleDeleteWorkExperience}
             onEditWorkExp={handleEditWorkExperience}
-            editingIndex={editingIndex}
+            editingIndex={editingWorkExpIndex}
             workExperiences={enteredWorkExps}
           />
           <Education
             onAddNewEducation={handleAddEducation}
             onDeleteEducation={handleDeleteEducation}
+            editingIndex={editingEducationIndex}
+            education={enteredEducation}
           />
           <Skills
             onAddSkill={handleAddSkill}
@@ -200,7 +218,7 @@ export default function App() {
                     className="delete-button"
                     onClick={() => handleEditWorkExperience(index)}
                   >
-                    {editingIndex !== null ? "🡄 Editing" : "Edit"}
+                    {editingWorkExpIndex !== null ? "🡄 Editing" : "Edit"}
                   </button>
                   <button
                     className="delete-button"
@@ -219,6 +237,12 @@ export default function App() {
                   <h3>{`${education.institution} - ${education.degree}`}</h3>
                   <p>{`${education["start-date-edu"]} - ${education["end-date-edu"]}`}</p>
                   <p>{education["description-edu"]}</p>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleEditEducation(index)}
+                  >
+                    {editingEducationIndex !== null ? "🡄 Editing" : "Edit"}
+                  </button>
                   <button
                     className="delete-button"
                     onClick={() => handleDeleteEducation(index)}
@@ -248,6 +272,10 @@ export default function App() {
           </div>
         </div>
       </div>
+      <footer>
+        <p>Made by alonso-dev</p>
+        <div className="coffee-cup"></div>
+      </footer>
     </>
   );
 }

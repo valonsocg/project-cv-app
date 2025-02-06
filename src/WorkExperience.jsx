@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function WorkExperience({
   onAddWorkExperience,
@@ -8,8 +8,14 @@ export default function WorkExperience({
   const [tasks, setTasks] = useState([]);
   const [currentTask, setCurrentTask] = useState("");
 
+  const formRef = useRef(null);
+
   useEffect(() => {
-    if (editingIndex !== null) {
+    if (editingIndex !== null && formRef.current) {
+      //scroll to work experience and focus
+      formRef.current.scrollIntoView({ behavior: "smooth" });
+      formRef.current.querySelector("input").focus();
+      //populate work experience to edit
       const experience = workExperiences[editingIndex];
       setTasks(experience.tasks);
 
@@ -45,7 +51,11 @@ export default function WorkExperience({
   return (
     <section className="work-experience">
       <h2>Work Experience</h2>
-      <form className="work-experience-form" onSubmit={handleSubmit}>
+      <form
+        className="work-experience-form"
+        onSubmit={handleSubmit}
+        ref={formRef}
+      >
         <div className="form-group">
           <label htmlFor="company">Company</label>
           <input type="text" id="company" name="company" required />
@@ -96,7 +106,7 @@ export default function WorkExperience({
           </ul>
         </div>
         <button className="add-button">
-          {editingIndex !== null ? "Save Experience" : "Add Experience"}
+          {editingIndex !== null ? "Done Editing" : "Add Experience"}
         </button>
       </form>
     </section>
