@@ -13,7 +13,7 @@ export default function PersonalInformation({
 
   return (
     <section className="personal-info">
-      <h1>Resume Builder</h1>
+      <h1 className="web-title">Resume Builder</h1>
       <h2>Personal Information</h2>
       <form className="personal-info-form" onSubmit={handleSubmit}>
         <div className="form-group">
